@@ -22,7 +22,7 @@ function Cube(props) {
     x: isBig ? 3 : 0
   })
 
-  const color = isHovered ? 'indigo' : 'cornflowerblue'
+  const color = isHovered ? 'lightskyblue' : 'cornflowerblue'
 
   return (
     <a.mesh
@@ -44,13 +44,23 @@ function Cube(props) {
 // sphere args = [radius (1), width min=3 (8), height min=2 (6)]
 // cylinder args = [radiusTop, radiusBottom, height, radialSegments]
 
+function Plane() {
+  return (
+    <mesh rotation={[(-Math.PI / 2), 0, 0]} position={[0, -2, 0]}>
+      <planeBufferGeometry attach="geometry" args={[10, 10]} />
+      <meshStandardMaterial attach="material" color="tan" />
+    </mesh>
+  )
+}
+
 function Scene() {
   const { camera, gl: { domElement } } = useThree()
   return (
     <>
       <ambientLight />
-      <pointLight intensity={0.5} position={[-1, 2, 4]} />
-      <Cube rotation={[10, 10, 0]} position={[0, 0, 0]} />
+      <pointLight intensity={0.5} position={[0, 0, 3]} />
+      <Plane />
+      <Cube rotation={[10, 10, 0]} position={[-1, -1, 0]} />
       <Cube rotation={[10, 20, 0]} position={[2, 2, 0]} />
       <orbitControls args={[camera, domElement]} />
     </>
