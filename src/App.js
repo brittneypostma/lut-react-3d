@@ -19,7 +19,7 @@ function Cube(props) {
 
   const { size, x } = useSpring({
     size: isBig ? [2, 2, 2] : [1, 1, 1],
-    x: isBig ? 3 : 0
+    x: isBig ? 2 : 0
   })
 
   const color = isHovered ? 'lightskyblue' : 'cornflowerblue'
@@ -30,12 +30,19 @@ function Cube(props) {
       ref={ref}
       scale={size}
       position-x={x}
+      castShadow={true}
+      receiveShadow={true}
       onClick={() => setIsBig(!isBig)}
       onPointerOut={() => setIsHovered(false)}
       onPointerOver={() => setIsHovered(true)}
     >
       <sphereBufferGeometry attach="geometry" args={[1, 8, 6]} />
-      <meshPhongMaterial flatShading={true} shininess={100} attach="material" color={color} />
+      <meshPhongMaterial
+        flatShading={true}
+        roughness={1}
+        metalness={0.5}
+        shininess={100} attach="material" color={color}
+      />
     </a.mesh>
   )
 }
@@ -46,8 +53,11 @@ function Cube(props) {
 
 function Plane() {
   return (
-    <mesh rotation={[(-Math.PI / 2), 0, 0]} position={[0, -2, 0]}>
-      <planeBufferGeometry attach="geometry" args={[10, 10]} />
+    <mesh
+      receiveShadow={true}
+      rotation={[(-Math.PI / 2), 0, 0]}
+      position={[0, -2, -5]}>
+      <planeBufferGeometry attach="geometry" args={[20, 20]} />
       <meshStandardMaterial attach="material" color="tan" />
     </mesh>
   )
@@ -58,10 +68,13 @@ function Scene() {
   return (
     <>
       <ambientLight />
-      <pointLight intensity={0.5} position={[0, 0, 3]} />
+      <spotLight
+        castShadow={true}
+        intensity={0.5}
+        position={[0, 10, 4]} />
       <Plane />
-      <Cube rotation={[10, 10, 0]} position={[-1, -1, 0]} />
-      <Cube rotation={[10, 20, 0]} position={[2, 2, 0]} />
+      <Cube rotation={[10, 10, 0]} position={[0, 0, 0]} />
+      <Cube rotation={[10, 20, 0]} position={[3, 3, -2]} />
       <orbitControls args={[camera, domElement]} />
     </>
   )
@@ -69,7 +82,7 @@ function Scene() {
 
 function App() {
   return (
-    <Canvas>
+    <Canvas shadowMap={true}>
       <Scene />
     </Canvas>
   );
